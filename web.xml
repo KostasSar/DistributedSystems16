@@ -18,7 +18,7 @@
 </context-param>
 <context-param>
         <param-name>dbPassword</param-name>
-        <param-value>it21476</param-value>
+        <param-value>changeit</param-value>
 </context-param>
 <context-param>
         <param-name>dbURL</param-name>
