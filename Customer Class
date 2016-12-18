@@ -6,7 +6,7 @@ public class Customer implements Serializable {
 	private static final long serialVersionUID = -1355807851822025659L;
 	private String name;
 	private String surname;
-	private String TRN;
+	private int TRN;
 	private int Phone_Number;
 	private int Cash_Prize;
 	private int Store_id;
@@ -29,7 +29,7 @@ public class Customer implements Serializable {
 		this.surname = surname;
 	}
 
-	public void setTRN(String TRN) {
+	public void setTRN(int TRN) {
 		this.TRN = TRN;
 	}
 
@@ -59,7 +59,7 @@ public class Customer implements Serializable {
 		return surname;
 	}
 
-	public String getTRN() {
+	public int getTRN() {
 		return TRN;
 	}
 
