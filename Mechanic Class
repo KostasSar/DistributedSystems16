@@ -13,7 +13,7 @@
         public void setName(String name) {
                 this.name = name;
         }
-        public void setEmail(String surname) {
+        public void setSurname(String surname) {
                 this.surname = surname;
         }
         public void setId(int id) {
