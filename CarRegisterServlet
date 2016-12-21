@@ -1,0 +1,94 @@
+package servlets;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+/**
+ * Servlet implementation class CarResgisterServlet
+ */
+@WebServlet("/CarRegisterServlet")
+public class CarRegisterServlet extends HttpServlet {
+        private static final long serialVersionUID = 1L;
+       
+        /**
+         * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+         */
+        protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                
+                // allow access only if cookie exists
+                                Cookie[] cookies = request.getCookies();
+                                String userName = null;
+                                String department = null;
+                                if (cookies != null) {
+                                        for (Cookie cookie : cookies) {
+                                                if (cookie.getName().equals("userName")) {
+                                                        userName = cookie.getValue();
+                                                }if (cookie.getName().equals("userDepartment")) {
+                                					department = cookie.getValue();
+                                				}
+                                        }
+                                }        
+
+                                if (userName == null) { 
+                                        response.sendRedirect("Login.html");
+                } else {
+            HttpSession session = request.getSession();
+                        // Receives data from form
+                        String carName = request.getParameter("carname");
+                        String carPlate = request.getParameter("carplate");
+                        String carFuel = request.getParameter("fuel");
+                        String carCondition = request.getParameter("carcondition");
+                        int caryear = Integer.parseInt(request.getParameter("caryear"));
+                        int trn = Integer.parseInt((String) request.getSession().getAttribute("customerTRN"));
+                        int store = Integer.parseInt(department);
+                
+                        Connection con = (Connection) getServletContext().getAttribute("DBConnection");
+            			PreparedStatement ps = null;
+
+            			try {
+            				ps = con.prepareStatement(
+            						"INSERT INTO VEHICLE  (Model,License_Plate,Fuel_Type,Release_Year,Vehicle_Condition,Owner_TRN,Store) VALUES (?,?,?,?,?,?,?)");
+            				ps.setString(1, carName);
+            				ps.setString(2, carPlate);
+            				ps.setString(3, carFuel);
+            				ps.setInt(4, caryear);
+            				ps.setString(5, carCondition);
+            				ps.setInt(6, trn);
+            				ps.setInt(7, store);
+            				ps.executeUpdate();
+            			} catch (SQLException e) {
+            				e.printStackTrace();
+                        
+                        
+                        
+                        
+                        // Input data is stored in session for later use
+                        session.setAttribute("carName", carName);
+                        session.setAttribute("carPlate", carPlate);
+                        session.setAttribute("carFuel", carFuel);
+                        session.setAttribute("carCondition", carCondition);
+                        
+                        //PRINT THESE TO CHECK IF SESSION LOADS THEM PROPERLY.
+                        String customerName = (String) session.getAttribute("customerName");
+                        String customerSurname = (String) session.getAttribute("customerSurname");
+                        String customerTRN = (String) session.getAttribute("customerTRN");
+                        String customerPhone = (String) session.getAttribute("customerPhone");
+                        log(customerName);
+                        log(customerTRN);
+                        
+                        response.sendRedirect("Login.html");
+                }
+                } 
+        }
+        
+}
