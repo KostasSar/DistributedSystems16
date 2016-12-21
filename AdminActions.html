@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./mystyle.css">
+		<script type="text/javascript">
+			function HideFunction(number){
+				switch(number){
+					case 1:
+					document.getElementById("EmployeeRegisterForm").style.display="block";
+					document.getElementById("CreateEmployeeAccountButton").style.display="none";
+					document.getElementById("ModifyEmployeeAccountDiv").style.display="none";
+					document.getElementById("DeleteEmployeeAccountDiv").style.display="none";
+					document.getElementById("CheckCustomerListDiv").style.display="none";
+					break;
+					case 2:
+					document.getElementById("ModifyEmployeeAccountForm").style.display="block";
+					document.getElementById("ModifyEmployeeAccountButton").style.display="none";
+					document.getElementById("CreateEmployeeAccountDiv").style.display="none";
+					document.getElementById("DeleteEmployeeAccountDiv").style.display="none";
+					document.getElementById("CheckCustomerListDiv").style.display="none";
+					break;
+					case 3:
+					document.getElementById("DeleteEmployeeAccountForm").style.display="block";
+					document.getElementById("CreateEmployeeAccountDiv").style.display="none";
+					document.getElementById("ModifyEmployeeAccountDiv").style.display="none";
+					document.getElementById("DeleteEmployeeAccountButton").style.display="none";
+					document.getElementById("CheckCustomerListDiv").style.display="none";
+					break;
+				}				
+			}
+		
+			function ShowFunction(number){
+				if(number == 1){
+					document.getElementById("CreateEmployeeAccountButton").style.display="block";
+					document.getElementById("EmployeeRegisterForm").style.display="none";
+					document.getElementById("ModifyEmployeeAccountDiv").style.display="block";
+					document.getElementById("DeleteEmployeeAccountDiv").style.display="block";
+					document.getElementById("CheckCustomerListDiv").style.display="block";
+				}else if(number == 2){
+					document.getElementById("ModifyEmployeeAccountButton").style.display="block";
+					document.getElementById("ModifyEmployeeAccountForm").style.display="none";
+					document.getElementById("CreateEmployeeAccountDiv").style.display="block";
+					document.getElementById("DeleteEmployeeAccountDiv").style.display="block";
+					document.getElementById("CheckCustomerListDiv").style.display="block";
+				}else{
+					document.getElementById("DeleteEmployeeAccountButton").style.display="block";
+					document.getElementById("DeleteEmployeeAccountForm").style.display="none";
+					document.getElementById("CreateEmployeeAccountDiv").style.display="block";
+					document.getElementById("ModifyEmployeeAccountDiv").style.display="block";
+					document.getElementById("CheckCustomerListDiv").style.display="block";
+				}				
+			}
+
+		</script>
+	</head>
+	<body style="background-color:Gainsboro;">
+		<h1>Choose an action</h1>
+		
+		<div id="CreateEmployeeAccountDiv">
+		<input type="button" id="CreateEmployeeAccountButton" class="button" onclick="HideFunction(1)" value="Create Employee Account"><br>
+			<form  id="EmployeeRegisterForm" style="display:none" >
+				Please enter an employee name:<br>
+				<input type="text" placeholder="name" name="emname" required><br>
+				Please enter an employee surname:<br>
+				<input type="text" placeholder="surname" name="emcusurname" required><br>
+				Please enter an employee phone number:<br>
+				<input type="text" placeholder="phone number" name="emphone" required><br>
+				Please enter an employee id:<br>
+				<input type="text" placeholder="id" name="e,name"required><br>
+				Please enter an employee password:<br>
+				<input type="text" placeholder="password" name="empsw"required><br>
+				
+				<input type="submit" value="Submit"> 
+				<button type="reset"  class="Cbutton" >Clear</button>
+				<input type="button" class="Bbutton" value="Back" onclick="ShowFunction(1)"> 
+			</form>
+		</div>	
+		
+		<div id="ModifyEmployeeAccountDiv">
+			<input type="button" class="button" id="ModifyEmployeeAccountButton" onclick="HideFunction(2)" value="Modify Employee Account"><br>
+			<form id="ModifyEmployeeAccountForm" style="display:none">
+				Choose an id:
+				Please enter an employee name:<br>
+				<input type="text" placeholder="name" name="emname" required><br>
+				Please enter an employee surname:<br>
+				<input type="text" placeholder="surname" name="emcusurname" required><br>
+				Please enter an employee phone number:<br>
+				<input type="text" placeholder="phone number" name="emphone" required><br>
+				Please enter an employee id:<br>
+				<input type="text" placeholder="id" name="e,name"required><br>
+				Please enter an employee password:<br>
+				<input type="text" placeholder="password" name="empsw"required><br>
+				
+				<input type="submit" value="Submit"> 
+				<button type="reset"  class="Cbutton" >Clear</button>
+				<input type="button" class="Bbutton" value="Back" onclick="ShowFunction(2)"> 
+			</form>
+		</div>
+		
+		<div id="DeleteEmployeeAccountDiv"> 
+			<input type="button" class="button" id="DeleteEmployeeAccountButton" onclick="HideFunction(3)" value="Delete Employee Account"><br>
+			<form id="DeleteEmployeeAccountForm" style="display:none">
+				Choose an id:
+				<input type="text" name="iddeleter" required><br>
+				<input type="submit" value="Submit"> 
+				<button type="reset"  class="Cbutton" >Clear</button>
+				<input type="button" class="Bbutton" value="Back" onclick="ShowFunction(3)"> 
+			</form>
+		</div>	
+
+		<div id="CheckCustomerListDiv">
+		<input type="button" class="button" id="CheckCustomerListButton" value="Check Customer List"><br>
+			<form id="CheckCustomerListForm" style="display:none">
+				
+			</form>
+		</div>	
+		<input type="button" class="Lbutton" value="Logout"><br>
+		
+	</body>
+</html>

@@ -1,0 +1,45 @@
+CREATE TABLE EMPLOYEE(
+`Name` varchar(20) NOT NULL,
+`Surname` varchar(20) NOT NULL,
+`Password` varchar(8) NOT NULL,
+`Id` varchar(4) NOT NULL UNIQUE
+);
+
+CREATE TABLE MECHANIC(
+`Name` varchar(20) NOT NULL,
+`Surname` varchar (20) NOT NULL,
+`Password` varchar(8) NOT NULL,
+`Id` varchar(4) NOT NULL UNIQUE
+);
+
+CREATE TABLE CUSTOMER(
+`Entry` int(100) AUTO_INCREMENT,
+`Name` varchar(20) NOT NULL,
+`Surname` varchar(20) NOT NULL,
+`TRN` bigint(9) NOT NULL,
+`Phone_Number`bigint(10),
+`Cash_Prize` float(6),
+`Store_Id` enum('1','2','3','4','5'),
+PRIMARY KEY (`TRN`,`Store_Id`),
+UNIQUE KEY (`Entry`)
+);
+
+CREATE TABLE VEHICLE(
+`Entry` int(100) AUTO_INCREMENT,
+`Model` varchar(40),
+`License_Plate` varchar(40) NOT NULL UNIQUE,
+`Fuel_Type` enum('Gas','Gasoline','Oil'),
+`Release_Year` int(4),
+`Vehicle_condition` enum('Bad','Moderate','Good'),
+`Owner_TRN` bigint(9) NOT NULL,
+`Store` enum('1','2','3','4','5'),
+FOREIGN KEY (`Owner_TRN`,`Store`) REFERENCES CUSTOMER (`TRN`,`Store_Id`),
+UNIQUE KEY (`Entry`)
+);
+
+
+
+SELECT * FROM EMPLOYEE;
+SELECT * FROM MECHANIC;
+SELECT * FROM CUSTOMER ORDER BY Entry;
+SELECT * FROM VEHICLE ORDER BY Entry;

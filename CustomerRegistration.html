@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./mystyle.css">
+	</head>
+
+	<body style="background-color:Gainsboro;">
+		<h1>Customer Registration Form</h1>
+	
+		<form action="CustomerRegisterServlet" method="post">
+			Please enter a customer name:<br>
+			<input type="text" placeholder="Name" name="cuname" required><br>
+			Please enter a customer surname:<br>
+			<input type="text" placeholder="Surname" name="cusurname" required><br>
+			Please enter a customer TRN  (Tax Registration Number):<br>
+			<input type="text" placeholder="TRN" name="cuTRN" required><br>
+			Please enter a customer phone number:<br>
+			<input type="text" placeholder="Phone Number" name="cuphone" required><br>
+			<input type="submit" value="Submit"> 
+			<button type="reset"  class="Cbutton" >Clear</button>
+		</form>
+	</body>
+</html>
