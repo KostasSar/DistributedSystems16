@@ -3,7 +3,9 @@ package servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
@@ -29,7 +31,7 @@ public class CustomerRegisterServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// allow access only if cookie exists
+		// Allow access only if cookie exists
 		Cookie[] cookies = request.getCookies();
 		String userName = null;
 		String department = null;
@@ -48,46 +50,223 @@ public class CustomerRegisterServlet extends HttpServlet {
 		if (userName == null) {
 			response.sendRedirect("Login.html");
 		} else {
-			HttpSession session = request.getSession();
-			// Receives data from form
-			String customerName = request.getParameter("cuname");
-			String customerSurname = request.getParameter("cusurname");
-			String customerTRN = request.getParameter("cuTRN");
-			String customerPhone = request.getParameter("cuphone");
-			Long ctrn = Long.parseLong(customerTRN);
-			Long cphone = Long.parseLong(customerPhone, 10);
-			int store = Integer.parseInt(department);
-		
+
+			// Create new connection
 			Connection con = (Connection) getServletContext().getAttribute("DBConnection");
 			PreparedStatement ps = null;
+			PreparedStatement ps1 = null;
+			PreparedStatement ps2 = null;
+			ResultSet rs = null;
+			ResultSet rs1 = null;
 
-			try {
-				ps = con.prepareStatement(
-						"INSERT INTO CUSTOMER  (Name,Surname,TRN,Phone_Number,Store_Id) VALUES (?,?,?,?,?)");
-				ps.setString(1, customerName);
-				ps.setString(2, customerSurname);
-				ps.setLong(3, ctrn);
-				ps.setLong(4, cphone);
-				ps.setInt(5, store);
-				ps.executeUpdate();
-			} catch (SQLException e) {
-				e.printStackTrace();
+			// Create new session
+			HttpSession session = request.getSession();
+
+			// If user pressed "submit" button
+			if (request.getParameter("button1") != null) {
+
+				// Receive data from form
+				String customerName = request.getParameter("cuname");
+				String customerSurname = request.getParameter("cusurname");
+				String customerTRN = request.getParameter("cuTRN");
+
+				// Check if received information is empty
+				if (!customerName.isEmpty() && !customerSurname.isEmpty() && !customerTRN.isEmpty()) {
+
+					// Check if TRN length is correct so it can be stored
+					// successfully in database
+					if (customerTRN.length() == 9) {
+
+						try {
+							Long ctrn = Long.parseLong(customerTRN);
+							int store = Integer.parseInt(department);
+							int entry;
+
+							try {
+
+								// Check if client is already registered
+								ps1 = con.prepareStatement(
+										"SELECT * FROM CUSTOMER WHERE Name=? AND Surname=? AND TRN=?");
+								ps1.setString(1, customerName);
+								ps1.setString(2, customerSurname);
+								ps1.setLong(3, ctrn);
+								rs1 = ps1.executeQuery();
+
+								// If client account exists redirect employee to
+								// the next web page
+								if (rs1 != null && rs1.next()) {
+									// Input data is stored in session for later
+									// use
+									session.setAttribute("customerName", customerName);
+									session.setAttribute("customerSurname", customerSurname);
+									session.setAttribute("customerTRN", customerTRN);
+
+									// Redirect user to the next web page
+									RequestDispatcher rd = getServletContext().getRequestDispatcher("/Carform.html");
+									PrintWriter out = response.getWriter();
+									out.println("<html><body>");
+									out.println("<h1>Customer : " + customerName + " " + customerSurname
+											+ " has already been registered!</h1>");
+									out.println("</body></html>");
+									rd.include(request, response);
+
+								} // Register new client, if their data can not
+									// be found in database
+								else {
+
+									// Get latest entry number
+									ps = con.prepareStatement(
+											" SELECT Entry FROM CUSTOMER ORDER BY Entry DESC LIMIT 1");
+									rs = ps.executeQuery();
+									rs.next();
+									entry = rs.getInt("Entry") + 1;
+
+									// Insert client information to database
+									ps2 = con.prepareStatement("INSERT INTO CUSTOMER  VALUES (?,?,?,?,?,?)");
+									ps2.setInt(1, entry);
+									ps2.setString(2, customerName);
+									ps2.setString(3, customerSurname);
+									ps2.setLong(4, ctrn);
+									ps2.setDate(5, java.sql.Date.valueOf(java.time.LocalDate.now()));
+									ps2.setInt(6, store);
+									int result = ps2.executeUpdate();
+
+									// If registration is successful inform user
+									if (result != 0) {
+
+										// Input data is stored in session for
+										// later
+										// use
+										session.setAttribute("customerName", customerName);
+										session.setAttribute("customerSurname", customerSurname);
+										session.setAttribute("customerTRN", customerTRN);
+
+										// Redirect user to the next web page
+										RequestDispatcher rd = getServletContext()
+												.getRequestDispatcher("/Carform.html");
+										PrintWriter out = response.getWriter();
+										out.println("<html><body>");
+										out.println("<h1>Customer registered successfully!</h1>");
+										out.println("</body></html>");
+										rd.include(request, response);
+									}
+								}
+							} // If updating database fails inform user
+							catch (SQLException e) {
+
+								e.printStackTrace();
+								RequestDispatcher rd = getServletContext()
+										.getRequestDispatcher("/CustomerRegistration.html");
+								PrintWriter out = response.getWriter();
+								out.println(
+										"<font color=red>Failed to register new client. Please check your connection and try again.</font>");
+								rd.include(request, response);
+
+							}
+						} // If inserted TRN number contains characters inform
+							// user.
+						catch (NumberFormatException e) {
+							RequestDispatcher rd = getServletContext()
+									.getRequestDispatcher("/CustomerRegistration.html");
+							PrintWriter out = response.getWriter();
+							out.println("<font color=red>The TRN number you inserted contains characters.</font>");
+							out.println("<font color=red>TRN number must contain only 9 digits.</font>");
+							rd.include(request, response);
+						}
+					} // If TRN number is longer than expected inform user
+					else {
+						RequestDispatcher rd = getServletContext().getRequestDispatcher("/CustomerRegistration.html");
+						PrintWriter out = response.getWriter();
+						out.println(
+								"<font color=red>TRN must be 9 digit long, not " + customerTRN.length() + ".</font>");
+						rd.include(request, response);
+					}
+				} // If user information is empty
+				else {
+					RequestDispatcher rd = getServletContext().getRequestDispatcher("/CustomerRegistration.html");
+					PrintWriter out = response.getWriter();
+					out.println("<font color=red> All fields are obligatory,please provide all information.</font>");
+					rd.include(request, response);
+				}
+			}
+			// If user pressed "View customer information" button
+			else if (request.getParameter("button2") != null) {
+
+				// Receive data
+				String customerTRN = request.getParameter("cuViewTRN");
+
+				// Check if received information isn't empty
+				if (!customerTRN.isEmpty()) {
+
+					// Check if TRN length is correct
+					if (customerTRN.length() == 9) {
+
+						try {
+							Long ctrn = Long.parseLong(customerTRN);
+							try {
+								ps = con.prepareStatement("SELECT  * FROM CUSTOMER  WHERE TRN=?");
+								ps.setLong(1, ctrn);
+								rs = ps.executeQuery();
+								System.out.println("" + rs);
+
+								while (rs.next()) {
+									PrintWriter out = response.getWriter();
+									String name = rs.getString("Name");
+									String surname = rs.getString("Surname");
+									long trn = rs.getLong("TRN");
+									Date date = new Date(rs.getDate("Registration_Date").getTime());
+									int store = rs.getInt("Store_Id");
+									out.print(" Customer Name : " + name);
+									out.println("<br>");
+									out.print(" Customer Surname : " + surname);
+									out.println("<br>");
+									out.println(" Customer TRN : " + trn);
+									out.println("<br>");
+									out.print("   Registration Date : " + date);
+									out.println("<br>");
+									out.print("   Registration Store : " + store);
+									System.out.println();
+								}
+								RequestDispatcher rd = getServletContext()
+										.getRequestDispatcher("/CustomerRegistration.html");
+								rd.include(request, response);
+
+							} catch (SQLException e) {
+								e.printStackTrace();
+								RequestDispatcher rd = getServletContext()
+										.getRequestDispatcher("/CustomerRegistration.html");
+								PrintWriter out = response.getWriter();
+								out.println(
+										"<font color=red>Failed to restore client's data . Please check your connection and try again.</font>");
+								rd.include(request, response);
+							}
+						} // If inserted TRN number contains characters inform
+							// user.
+						catch (NumberFormatException e) {
+							RequestDispatcher rd = getServletContext()
+									.getRequestDispatcher("/CustomerRegistration.html");
+							PrintWriter out = response.getWriter();
+							out.println("<font color=red>The TRN number you inserted contains characters.</font>");
+							out.println("<br>");
+							out.println("<font color=red>TRN number must contain only 9 digits.</font>");
+							rd.include(request, response);
+						}
+					} // If TRN number is longer than expected inform user
+					else {
+						RequestDispatcher rd = getServletContext().getRequestDispatcher("/CustomerRegistration.html");
+						PrintWriter out = response.getWriter();
+						out.println(
+								"<font color=red>TRN must be 9 digit long, not " + customerTRN.length() + ".</font>");
+						rd.include(request, response);
+					}
+				} else {
+					RequestDispatcher rd = getServletContext().getRequestDispatcher("/CustomerRegistration.html");
+					PrintWriter out = response.getWriter();
+					out.println("<font color=red>TRN number can not be empty.</font>");
+					rd.include(request, response);
+				}
 
 			}
-			// Input data is stored in session for later use
-			session.setAttribute("customerName", customerName);
-			session.setAttribute("customerSurname", customerSurname);
-			session.setAttribute("customerTRN", customerTRN);
-			session.setAttribute("customerPhone", customerPhone);
-
-			RequestDispatcher rd = getServletContext().getRequestDispatcher("/Carform.html");
-			PrintWriter out = response.getWriter();
-			out.println("<html><body>");
-			out.println("<h1>Session still valid!</h1>");
-			out.println("</body></html>");
-			rd.include(request, response);
-
 		}
-
 	}
 }
