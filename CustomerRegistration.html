@@ -3,22 +3,45 @@
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" type="text/css" href="./mystyle.css">
+		
+		<script type="text/javascript">
+			function HideFunction(){
+				document.getElementById("CustomerRegisterDiv").style.display = "none";
+				document.getElementById("ViewCustomerPrizeButton").style.display = "none";
+				document.getElementById("ViewCustomerPrizeForm").style.display = "block";
+			}
+			function ShowFunction(){
+				document.getElementById("CustomerRegisterDiv").style.display = "block";
+				document.getElementById("ViewCustomerPrizeButton").style.display = "block";
+				document.getElementById("ViewCustomerPrizeForm").style.display = "none";
+			}
+		</script>
 	</head>
 
 	<body style="background-color:Gainsboro;">
 		<h1>Customer Registration Form</h1>
 	
-		<form action="CustomerRegisterServlet" method="post">
-			Please enter a customer name:<br>
-			<input type="text" placeholder="Name" name="cuname" required><br>
-			Please enter a customer surname:<br>
-			<input type="text" placeholder="Surname" name="cusurname" required><br>
-			Please enter a customer TRN  (Tax Registration Number):<br>
-			<input type="text" placeholder="TRN" name="cuTRN" required><br>
-			Please enter a customer phone number:<br>
-			<input type="text" placeholder="Phone Number" name="cuphone" required><br>
-			<input type="submit" value="Submit"> 
-			<button type="reset"  class="Cbutton" >Clear</button>
-		</form>
+		<div id="CustomerRegisterDiv">
+			<form action="CustomerRegisterServlet" method="post">
+				Please enter customer's name:<br>
+				<input type="text" placeholder="name" name="cuname" required><br>
+				Please enter customer's surname:<br>
+				<input type="text" placeholder="surname" name="cusurname" required><br>
+				Please enter customer's TRN (Tax Registration Number):<br>
+				<input type="text" placeholder="TRN" name="cuTRN" required><br>
+				<input type="submit" name="button1" value="Submit"> 
+				<button type="reset"  class="Cbutton" >Clear</button>
+			</form>
+		</div>
+		<div id="ViewCustomerPrizeDiv">
+			<input type="button" name="ViewCustomerPrizeButton" id="ViewCustomerPrizeButton" value="View Customer Information"  onclick="HideFunction()"><br>
+			<form action="CustomerRegisterServlet" id="ViewCustomerPrizeForm" style="display: none"  method="post" >
+				Enter customer's TRN (Tax Registration Number) :<br>
+				<input type="text" placeholder="TRN" name="cuViewTRN" required><br>
+				<input type="submit" name="button2" value="Submit"> 
+				<button type="reset"  class="Cbutton" >Clear</button>
+				<input type="button" class="Bbutton" value="Back" onclick="ShowFunction()" name=""> 
+			</form>
+		</div>
 	</body>
 </html>
