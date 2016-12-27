@@ -1,121 +1,134 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<link rel="stylesheet" type="text/css" href="./mystyle.css">
-		<script type="text/javascript">
-			function HideFunction(number){
-				switch(number){
-					case 1:
-					document.getElementById("EmployeeRegisterForm").style.display="block";
-					document.getElementById("CreateEmployeeAccountButton").style.display="none";
-					document.getElementById("ModifyEmployeeAccountDiv").style.display="none";
-					document.getElementById("DeleteEmployeeAccountDiv").style.display="none";
-					document.getElementById("CheckCustomerListDiv").style.display="none";
-					break;
-					case 2:
-					document.getElementById("ModifyEmployeeAccountForm").style.display="block";
-					document.getElementById("ModifyEmployeeAccountButton").style.display="none";
-					document.getElementById("CreateEmployeeAccountDiv").style.display="none";
-					document.getElementById("DeleteEmployeeAccountDiv").style.display="none";
-					document.getElementById("CheckCustomerListDiv").style.display="none";
-					break;
-					case 3:
-					document.getElementById("DeleteEmployeeAccountForm").style.display="block";
-					document.getElementById("CreateEmployeeAccountDiv").style.display="none";
-					document.getElementById("ModifyEmployeeAccountDiv").style.display="none";
-					document.getElementById("DeleteEmployeeAccountButton").style.display="none";
-					document.getElementById("CheckCustomerListDiv").style.display="none";
-					break;
-				}				
-			}
-		
-			function ShowFunction(number){
-				if(number == 1){
-					document.getElementById("CreateEmployeeAccountButton").style.display="block";
-					document.getElementById("EmployeeRegisterForm").style.display="none";
-					document.getElementById("ModifyEmployeeAccountDiv").style.display="block";
-					document.getElementById("DeleteEmployeeAccountDiv").style.display="block";
-					document.getElementById("CheckCustomerListDiv").style.display="block";
-				}else if(number == 2){
-					document.getElementById("ModifyEmployeeAccountButton").style.display="block";
-					document.getElementById("ModifyEmployeeAccountForm").style.display="none";
-					document.getElementById("CreateEmployeeAccountDiv").style.display="block";
-					document.getElementById("DeleteEmployeeAccountDiv").style.display="block";
-					document.getElementById("CheckCustomerListDiv").style.display="block";
-				}else{
-					document.getElementById("DeleteEmployeeAccountButton").style.display="block";
-					document.getElementById("DeleteEmployeeAccountForm").style.display="none";
-					document.getElementById("CreateEmployeeAccountDiv").style.display="block";
-					document.getElementById("ModifyEmployeeAccountDiv").style.display="block";
-					document.getElementById("CheckCustomerListDiv").style.display="block";
-				}				
-			}
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="./mystyle.css">
+<script type="text/javascript">
+	function HideFunction(number) {
+		switch (number) {
+		case 1:
+			document.getElementById("UserRegisterForm").style.display = "block";
+			document.getElementById("CreateUserAccountButton").style.display = "none";
+			document.getElementById("ModifyUserAccountDiv").style.display = "none";
+			document.getElementById("DeleteUserAccountDiv").style.display = "none";
+			document.getElementById("CheckUserListDiv").style.display = "none";
+			break;
+		case 2:
+			document.getElementById("ModifyUserAccountForm").style.display = "block";
+			document.getElementById("ModifyUserAccountButton").style.display = "none";
+			document.getElementById("CreateUserAccountDiv").style.display = "none";
+			document.getElementById("DeleteUserAccountDiv").style.display = "none";
+			document.getElementById("CheckUserListDiv").style.display = "none";
+			break;
+		case 3:
+			document.getElementById("DeleteUserAccountForm").style.display = "block";
+			document.getElementById("CreateUserAccountDiv").style.display = "none";
+			document.getElementById("ModifyUserAccountDiv").style.display = "none";
+			document.getElementById("DeleteUserAccountButton").style.display = "none";
+			document.getElementById("CheckUserListDiv").style.display = "none";
+			break;
+		}
+	}
 
-		</script>
-	</head>
-	<body style="background-color:Gainsboro;">
-		<h1>Choose an action</h1>
-		
-		<div id="CreateEmployeeAccountDiv">
-		<input type="button" id="CreateEmployeeAccountButton" class="button" onclick="HideFunction(1)" value="Create Employee Account"><br>
-			<form  id="EmployeeRegisterForm" style="display:none" >
-				Please enter an employee name:<br>
-				<input type="text" placeholder="name" name="emname" required><br>
-				Please enter an employee surname:<br>
-				<input type="text" placeholder="surname" name="emcusurname" required><br>
-				Please enter an employee phone number:<br>
-				<input type="text" placeholder="phone number" name="emphone" required><br>
-				Please enter an employee id:<br>
-				<input type="text" placeholder="id" name="e,name"required><br>
-				Please enter an employee password:<br>
-				<input type="text" placeholder="password" name="empsw"required><br>
-				
-				<input type="submit" value="Submit"> 
-				<button type="reset"  class="Cbutton" >Clear</button>
-				<input type="button" class="Bbutton" value="Back" onclick="ShowFunction(1)"> 
-			</form>
-		</div>	
-		
-		<div id="ModifyEmployeeAccountDiv">
-			<input type="button" class="button" id="ModifyEmployeeAccountButton" onclick="HideFunction(2)" value="Modify Employee Account"><br>
-			<form id="ModifyEmployeeAccountForm" style="display:none">
-				Choose an id:
-				Please enter an employee name:<br>
-				<input type="text" placeholder="name" name="emname" required><br>
-				Please enter an employee surname:<br>
-				<input type="text" placeholder="surname" name="emcusurname" required><br>
-				Please enter an employee phone number:<br>
-				<input type="text" placeholder="phone number" name="emphone" required><br>
-				Please enter an employee id:<br>
-				<input type="text" placeholder="id" name="e,name"required><br>
-				Please enter an employee password:<br>
-				<input type="text" placeholder="password" name="empsw"required><br>
-				
-				<input type="submit" value="Submit"> 
-				<button type="reset"  class="Cbutton" >Clear</button>
-				<input type="button" class="Bbutton" value="Back" onclick="ShowFunction(2)"> 
-			</form>
-		</div>
-		
-		<div id="DeleteEmployeeAccountDiv"> 
-			<input type="button" class="button" id="DeleteEmployeeAccountButton" onclick="HideFunction(3)" value="Delete Employee Account"><br>
-			<form id="DeleteEmployeeAccountForm" style="display:none">
-				Choose an id:
-				<input type="text" name="iddeleter" required><br>
-				<input type="submit" value="Submit"> 
-				<button type="reset"  class="Cbutton" >Clear</button>
-				<input type="button" class="Bbutton" value="Back" onclick="ShowFunction(3)"> 
-			</form>
-		</div>	
+	function ShowFunction(number) {
+		if (number == 1) {
+			document.getElementById("CreateUserAccountButton").style.display = "block";
+			document.getElementById("UserRegisterForm").style.display = "none";
+			document.getElementById("ModifyUserAccountDiv").style.display = "block";
+			document.getElementById("DeleteUserAccountDiv").style.display = "block";
+			document.getElementById("CheckUserListDiv").style.display = "block";
+		} else if (number == 2) {
+			document.getElementById("ModifyUserAccountButton").style.display = "block";
+			document.getElementById("ModifyUserAccountForm").style.display = "none";
+			document.getElementById("CreateUserAccountDiv").style.display = "block";
+			document.getElementById("DeleteUserAccountDiv").style.display = "block";
+			document.getElementById("CheckUserListDiv").style.display = "block";
+		} else {
+			document.getElementById("DeleteUserAccountButton").style.display = "block";
+			document.getElementById("DeleteUserAccountForm").style.display = "none";
+			document.getElementById("CreateUserAccountDiv").style.display = "block";
+			document.getElementById("ModifyUserAccountDiv").style.display = "block";
+			document.getElementById("CheckUserListDiv").style.display = "block";
+		}
+	}
+</script>
+</head>
+<body style="background-color: Gainsboro;">
+	<h1>Choose an action</h1>
 
-		<div id="CheckCustomerListDiv">
-		<input type="button" class="button" id="CheckCustomerListButton" value="Check Customer List"><br>
-			<form id="CheckCustomerListForm" style="display:none">
-				
-			</form>
-		</div>	
-		<input type="button" class="Lbutton" value="Logout"><br>
-		
-	</body>
+	<div id="CreateUserAccountDiv">
+		<input type="button" id="CreateUserAccountButton" class="button"
+			onclick="HideFunction(1)" value="Create User Account"><br>
+		<form id="UserRegisterForm" style="display: none"
+			action="AdminServlet" method="post">
+			Please enter an User name:<br> <input type="text"
+				placeholder="name" name="uname" required><br> Please
+			enter an User surname:<br> <input type="text"
+				placeholder="surname" name="usurname" required><br>
+			Please enter an User id:<br> <input type="text" placeholder="id"
+				name="uid" required><br> Please enter an User password:<br>
+			<input type="text" placeholder="password" name="upwd" required><br>
+			Please enter user's department : <br> <input type="radio"
+				name="store" value="1" checked>1 <input type="radio"
+				name="store" value="2">2 <input type="radio" name="store"
+				value="3">3 <input type="radio" name="store" value="4">4
+			<input type="radio" name="store" value="5"> 5<br> Please
+			enter user's position : <br> <input type="radio" name="position"
+				value="Employee" checked>Employee <input type="radio"
+				name="position" value="Mechanic">Mechanic <br> <input
+				type="submit" name="button1" value="Submit">
+			<button type="reset" class="Cbutton">Clear</button>
+			<input type="button" class="Bbutton" value="Back"
+				onclick="ShowFunction(1)">
+		</form>
+	</div>
+
+	<div id="ModifyUserAccountDiv">
+		<input type="button" class="button" id="ModifyUserAccountButton"
+			onclick="HideFunction(2)" value="Modify User Account"><br>
+		<form id="ModifyUserAccountForm" style="display: none"
+			action="AdminServlet" method="post">
+			Choose an id: <input type="text" name="idfinderr" required><br>
+			Please enter an User name:<br> <input type="text"
+				placeholder="name" name="uname" required><br> Please
+			enter an User surname:<br> <input type="text"
+				placeholder="surname" name="usurname" required><br>
+			Please enter an User password:<br> <input type="text"
+				placeholder="password" name="upsw" required><br> Please
+			enter an User id:<br> <input type="text" placeholder="id"
+				name="uid" required><br> <input type="submit"
+				name="button2" value="Submit">
+			<button type="reset" class="Cbutton">Clear</button>
+			<input type="button" class="Bbutton" value="Back"
+				onclick="ShowFunction(2)">
+		</form>
+	</div>
+
+	<div id="DeleteUserAccountDiv">
+		<input type="button" class="button" id="DeleteUserAccountButton"
+			onclick="HideFunction(3)" value="Delete User Account"><br>
+		<form id="DeleteUserAccountForm" style="display: none"
+			action="AdminServlet" method="post">
+			> Choose an id: <input type="text" name="iddeleter" required><br>
+			<input type="submit" name="button3" value="Submit">
+			<button type="reset" class="Cbutton">Clear</button>
+			<input type="button" class="Bbutton" value="Back"
+				onclick="ShowFunction(3)">
+		</form>
+	</div>
+
+
+	<input type="button" class="Lbutton" value="Logout">
+	<br>
+
+</body>
 </html>
+
+
+
+
+
+
+
+
+
