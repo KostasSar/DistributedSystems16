@@ -203,9 +203,11 @@ public class CustomerRegisterServlet extends HttpServlet {
 
 						try {
 							Long ctrn = Long.parseLong(customerTRN);
+							int store_id = Integer.parseInt(department);
 							try {
-								ps = con.prepareStatement("SELECT  * FROM CUSTOMER  WHERE TRN=?");
+								ps = con.prepareStatement("SELECT  * FROM CUSTOMER  WHERE TRN=? AND Store_Id=?");
 								ps.setLong(1, ctrn);
+								ps.setInt(2,store_id);
 								rs = ps.executeQuery();
 								System.out.println("" + rs);
 
@@ -246,7 +248,7 @@ public class CustomerRegisterServlet extends HttpServlet {
 							RequestDispatcher rd = getServletContext()
 									.getRequestDispatcher("/CustomerRegistration.html");
 							PrintWriter out = response.getWriter();
-							out.println("<font color=red>The TRN number you inserted contains characters.</font>");
+							out.println("<font color=red>TRN number you inserted contains characters.</font>");
 							out.println("<br>");
 							out.println("<font color=red>TRN number must contain only 9 digits.</font>");
 							rd.include(request, response);
