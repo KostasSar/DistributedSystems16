@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./mystyle.css">
+		
+		<script type="text/javascript">
+			function HideFunction(){
+				document.getElementById("NewCustomerRegisterDiv").style.display = "none";
+				document.getElementById("ViewLogoutButton").style.display = "none";
+				document.getElementById("ViewLogoutForm").style.display = "block";
+			}
+			function ShowFunction(){
+				document.getElementById("CustomerRegisterDiv").style.display = "block";
+				document.getElementById("ViewLogoutButton").style.display = "block";
+				document.getElementById("ViewLogoutForm").style.display = "none";
+			}
+		</script>
+	</head>
+
+	<body style="background-color:Gainsboro;">
+		<h1>What whould you like to do next?</h1>
+	
+		<div id="NewCustomerRegisterDiv">
+			<form action="EmployeeLogout" method="post">
+				Register new customer: <br>
+				<input type="submit" name="button1" value="Return"> 
+			</form>
+		</div>
+		<div id="ViewLogoutButton">
+			<form action="EmployeeLogout" method="post">
+				Logout: <br>
+				<input type="submit" name="button2" value="Logout"> 
+			</form>
+		</div>
+	</body>
+</html>
