@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="./mystyle.css">
+
+<script type="text/javascript">
+			function HideFunction(){
+				document.getElementById("CustomerRegisterDiv").style.display = "none";
+				document.getElementById("ViewCustomerButton").style.display = "none";
+				document.getElementById("ViewCustomerForm").style.display = "block";
+			}
+			function ShowFunction(){
+				document.getElementById("CustomerRegisterDiv").style.display = "block";
+				document.getElementById("ViewCustomerButton").style.display = "block";
+				document.getElementById("ViewCustomerForm").style.display = "none";
+			}
+		</script>
+</head>
+
+<body style="background-color: Gainsboro;">
+	<h1>Customer Registration Form</h1>
+
+	<div id="CustomerRegisterDiv">
+		<form action="CustomerRegisterServlet" method="post">
+			Please enter customer's name:<br> <input type="text"
+				placeholder="name" name="cuname" required><br> Please
+			enter customer's surname:<br> <input type="text"
+				placeholder="surname" name="cusurname" required><br>
+			Please enter customer's TRN (Tax Registration Number):<br> <input
+				type="text" placeholder="TRN" name="cuTRN" required><br>
+			<input type="submit" name="button1" value="Submit">
+			<button type="reset" class="Cbutton">Clear</button>
+			<input type="button" class="Bbutton" value="Back"
+				onclick="ShowFunction()" name="">
+		</form>
+	</div>
+	<br></br>
+	<div id="ViewCustomerDiv">
+		<input type="button" name="ViewCustomerButton" id="ViewCustomerButton"
+			value="View Customer Information" onclick="HideFunction()"><br>
+		<form action="CustomerRegisterServlet" id="ViewCustomerForm"
+			style="display: none" method="post">
+			Enter customer's TRN (Tax Registration Number) :<br> <input
+				type="text" placeholder="TRN" name="cuViewTRN" required><br>
+			<input type="submit" name="button2" value="Submit">
+			<button type="reset" class="Cbutton">Clear</button>
+			<input type="button" class="Bbutton" value="Back"
+				onclick="ShowFunction()" name="">
+		</form>
+	</div>
+</body>
+</html>
