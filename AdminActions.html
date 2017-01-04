@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="./mystyle.css">
+<script type="text/javascript">
+	function HideFunction(number) {
+		switch (number) {
+		case 1:
+			document.getElementById("UserRegisterForm").style.display = "block";
+			document.getElementById("CreateUserAccountButton").style.display = "none";
+			document.getElementById("ModifyUserAccountDiv").style.display = "none";
+			document.getElementById("DeleteUserAccountDiv").style.display = "none";
+			document.getElementById("CheckUserListDiv").style.display = "none";
+			break;
+		case 2:
+			document.getElementById("ModifyUserAccountForm").style.display = "block";
+			document.getElementById("ModifyUserAccountButton").style.display = "none";
+			document.getElementById("CreateUserAccountDiv").style.display = "none";
+			document.getElementById("DeleteUserAccountDiv").style.display = "none";
+			document.getElementById("CheckUserListDiv").style.display = "none";
+			break;
+		case 3:
+			document.getElementById("DeleteUserAccountForm").style.display = "block";
+			document.getElementById("CreateUserAccountDiv").style.display = "none";
+			document.getElementById("ModifyUserAccountDiv").style.display = "none";
+			document.getElementById("DeleteUserAccountButton").style.display = "none";
+			document.getElementById("CheckUserListDiv").style.display = "none";
+			break;
+		}
+	}
+
+	function ShowFunction(number) {
+		if (number == 1) {
+			document.getElementById("CreateUserAccountButton").style.display = "block";
+			document.getElementById("UserRegisterForm").style.display = "none";
+			document.getElementById("ModifyUserAccountDiv").style.display = "block";
+			document.getElementById("DeleteUserAccountDiv").style.display = "block";
+			document.getElementById("CheckUserListDiv").style.display = "block";
+		} else if (number == 2) {
+			document.getElementById("ModifyUserAccountButton").style.display = "block";
+			document.getElementById("ModifyUserAccountForm").style.display = "none";
+			document.getElementById("CreateUserAccountDiv").style.display = "block";
+			document.getElementById("DeleteUserAccountDiv").style.display = "block";
+			document.getElementById("CheckUserListDiv").style.display = "block";
+		} else {
+			document.getElementById("DeleteUserAccountButton").style.display = "block";
+			document.getElementById("DeleteUserAccountForm").style.display = "none";
+			document.getElementById("CreateUserAccountDiv").style.display = "block";
+			document.getElementById("ModifyUserAccountDiv").style.display = "block";
+			document.getElementById("CheckUserListDiv").style.display = "block";
+		}
+	}
+</script>
+</head>
+<body style="background-color: Gainsboro;">
+	<h1>Choose an action</h1>
+
+	<div id="CreateUserAccountDiv">
+		<input type="button" id="CreateUserAccountButton" class="button"
+			onclick="HideFunction(1)" value="Create User Account"><br>
+		<form id="UserRegisterForm" style="display: none"
+			action="AdminServlet" method="post">
+			Create new user account:<br></br> Please enter user name:<br> <input
+				type="text" placeholder="name" name="uname" required><br>
+			Please enter User surname:<br> <input type="text"
+				placeholder="surname" name="usurname" required><br>
+			Please enter unique user id:<br> <input type="text"
+				placeholder="id" name="uid" required><br> Please enter
+			user password:<br> <input type="text" placeholder="password"
+				name="upwd" required><br> <br>Please enter user's
+			department : <br> <input type="radio" name="store" value="1"
+				checked>1 <input type="radio" name="store" value="2">2
+			<input type="radio" name="store" value="3">3 <input
+				type="radio" name="store" value="4">4 <input type="radio"
+				name="store" value="5"> 5<br>
+			<br> Please enter user's position : <br> <input
+				type="radio" name="position" value="Employee" checked>Employee
+			<input type="radio" name="position" value="Mechanic">Mechanic
+			<br> <br>Please insert user's rights: <br> <input
+				type="checkbox" name="rc" value="rc">Access customer list.<br>
+			<input type="checkbox" name="rv" value="rv">Access vehicle
+			list. <br> <input type="checkbox" name="wc" value="wc">Register
+			new customer. <br> <input type="checkbox" name="wv" value="wv">Register
+			new vehicle.<br> <input type="checkbox" name="cv" value="cv">Check
+			vehicle's condition. <br> <input type="checkbox" name="dp"
+				value="dp">Deliver prize to customer. <br> <input
+				type="checkbox" name="rv" value="rv">Receive vehicle.<br>
+			<input type="checkbox" name="ma" value="ma">Make an
+			appointment.<br>
+			<br> <input type="submit" name="button1" value="Submit">
+			<button type="reset" class="Cbutton">Clear</button>
+			<input type="button" class="Bbutton" value="Back"
+				onclick="ShowFunction(1)">
+		</form>
+	</div>
+
+	<div id="ModifyUserAccountDiv">
+		<input type="button" class="button" id="ModifyUserAccountButton"
+			onclick="HideFunction(2)" value="Modify User Account"><br>
+		<form id="ModifyUserAccountForm" style="display: none"
+			action="AdminServlet" method="post">
+			Modify user's account:<br></br> Insert id: <input type="text"
+				name="idfinderr" required><br> <br>Please enter
+			new user-name:<br> <input type="text" placeholder="new name"
+				name="uname" required><br> Please Please enter new
+			user-surname:<br> <input type="text" placeholder="new surname"
+				name="usurname" required><br> Please enter new
+			password:<br> <input type="text" placeholder="new password"
+				name="upsw" required><br> Please enter new user id:<br>
+			<input type="text" placeholder="new id" name="uid" required><br>
+			<br>If you want to change any of the user's rights it is
+			necessary to rewrite them all. <br> <input type="checkbox"
+				name="rc" value="rc">Access customer list.<br> <input
+				type="checkbox" name="rv" value="rv">Access vehicle list. <br>
+			<input type="checkbox" name="wc" value="wc">Register new
+			customer. <br> <input type="checkbox" name="wv" value="wv">Register
+			new vehicle.<br> <input type="checkbox" name="cv" value="cv">Check
+			vehicle's condition. <br> <input type="checkbox" name="dp"
+				value="dp">Deliver prize to customer. <br> <input
+				type="checkbox" name="recv" value="recv">Receive vehicle.<br>
+			<input type="checkbox" name="ma" value="ma">Make an
+			appointment.<br>
+			<br> <input type="submit" name="button2" value="Submit">
+			<button type="reset" class="Cbutton">Clear</button>
+			<input type="button" class="Bbutton" value="Back"
+				onclick="ShowFunction(2)">
+		</form>
+	</div>
+
+	<div id="DeleteUserAccountDiv">
+		<input type="button" class="button" id="DeleteUserAccountButton"
+			onclick="HideFunction(3)" value="Delete User Account"><br>
+		<form id="DeleteUserAccountForm" style="display: none"
+			action="AdminServlet" method="post">
+			Delete user's account:<br></br> Choose an id: <input type="text"
+				name="iddeleter" required><br> <input type="submit"
+				name="button3" value="Submit">
+			<button type="reset" class="Cbutton">Clear</button>
+			<input type="button" class="Bbutton" value="Back"
+				onclick="ShowFunction(3)">
+		</form>
+	</div>
+	<div id="View Users">
+		<form action="AdminServlet" method="post">
+			<input type="submit" class="button" id="view" name="button4"
+				value="View Users"><br>
+		</form>
+	</div>
+	<div id="Logout">
+		<form action="AdminServlet" method="post">
+			<input type="submit" class="button" id="Logout" name="button5"
+				value="Logout"><br>
+		</form>
+	</div>
+
+</body>
+</html>
