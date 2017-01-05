@@ -3,11 +3,9 @@ package servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,10 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class CarResgisterServlet
+ * Servlet implementation class CustomerRegisterServlet
  */
-@WebServlet("/CarRegisterServlet")
-public class CarRegisterServlet extends HttpServlet {
+@WebServlet("/CustomerRegisterServlet")
+public class CustomerRegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -32,12 +30,10 @@ public class CarRegisterServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// allow access only if cookie exists
+		// Allow access only if cookie exists
 		Cookie[] cookies = request.getCookies();
 		String userName = null;
 		String department = null;
-		String userActivities = null;
-		String wv = null;
 
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
@@ -47,12 +43,7 @@ public class CarRegisterServlet extends HttpServlet {
 				if (cookie.getName().equals("userDepartment")) {
 					department = cookie.getValue();
 				}
-				if (cookie.getName().equals("userRights")) {
-					userActivities = cookie.getValue();
-					String[] parts = userActivities.split("-");
-					wv = parts[3];
 
-				}
 			}
 		}
 
@@ -60,148 +51,153 @@ public class CarRegisterServlet extends HttpServlet {
 			response.sendRedirect("Login.html");
 		} else {
 
+			// Create new connection
+			Connection con = (Connection) getServletContext().getAttribute("DBConnection");
+			PreparedStatement ps = null;
+			PreparedStatement ps1 = null;
+			PreparedStatement ps2 = null;
+			ResultSet rs = null;
+			ResultSet rs1 = null;
+
 			// Create new session
 			HttpSession session = request.getSession();
 
-			// Receive data from form
-			String carModel = request.getParameter("carmodel");
-			String carPlate = request.getParameter("carplate");
-			String carFuel = request.getParameter("fuel");
-			String year = request.getParameter("caryear");
+			// If user pressed "submit" button
+			if (request.getParameter("button1") != null) {
 
-			// Check if received data is empty
-			if (!carModel.isEmpty() && !carPlate.isEmpty() && !carFuel.isEmpty() && !year.isEmpty()) {
-				// Check if employee has the right to modify vehicle list
-				if (wv.equals("wv")) {
-					int caryear = Integer.parseInt(year);
-					int currentyear = Calendar.getInstance().get(Calendar.YEAR);
+				// Receive data from form
+				String customerName = request.getParameter("cuname");
+				String customerSurname = request.getParameter("cusurname");
+				String customerTRN = request.getParameter("cuTRN");
 
-					// Check if car year is correct
-					if (caryear >= 1900 && caryear <= currentyear) {
+				// Check if received information is empty
+				if (!customerName.isEmpty() && !customerSurname.isEmpty() && !customerTRN.isEmpty()) {
 
-						// Check if inserted car plate number has the correct
-						// pattern
-						if (carPlate.length() == 8 && carPlate.matches("^[A-Z][A-Z][A-Z][-][0-9][0-9][0-9].$")) {
+					// Check if TRN length is correct so it can be stored
+					// successfully in database
+					if (customerTRN.length() == 9) {
 
-							// Get data from session
-							String state = "Unchecked";
-							Date date = java.sql.Date.valueOf(java.time.LocalDate.now());
+						try {
+							Long ctrn = Long.parseLong(customerTRN);
 							int store = Integer.parseInt(department);
-							Long trn = Long.parseLong((String) request.getSession().getAttribute("customerTRN"));
-							int entry = 2;
-							Connection con = (Connection) getServletContext().getAttribute("DBConnection");
-							PreparedStatement ps = null;
-							PreparedStatement ps1 = null;
-							ResultSet rs = null;
-							ResultSet rs1 = null;
+							int entry;
 
 							try {
 
-								// Get latest entry number
-								ps = con.prepareStatement(" SELECT Entry FROM VEHICLE ORDER BY Entry DESC LIMIT 1");
-								rs = ps.executeQuery();
-								rs.next();
-								entry = rs.getInt("Entry") + 1;
+								// Check if client is already registered
+								ps1 = con.prepareStatement(
+										"SELECT * FROM CUSTOMER WHERE Name=? AND Surname=? AND TRN=?");
+								ps1.setString(1, customerName);
+								ps1.setString(2, customerSurname);
+								ps1.setLong(3, ctrn);
+								rs1 = ps1.executeQuery();
 
-								// Check database for existing registration with
-								// the
-								// same car plate number
-								ps = con.prepareStatement(" SELECT * FROM VEHICLE WHERE License_Plate=?");
-								ps.setString(1, carPlate);
-								rs1 = ps.executeQuery();
-
-								if (!rs1.isBeforeFirst()) {
-
-									// Update database
-									ps1 = con.prepareStatement(
-											"INSERT INTO VEHICLE  (Entry,Model,License_Plate,Fuel_Type,Release_Year,State,Owner_TRN,Store,Registration_Date) VALUES (?,?,?,?,?,?,?,?,?)");
-									ps1.setInt(1, entry);
-									ps1.setString(2, carModel);
-									ps1.setString(3, carPlate);
-									ps1.setString(4, carFuel);
-									ps1.setInt(5, caryear);
-									ps1.setString(6, state);
-									ps1.setLong(7, trn);
-									ps1.setInt(8, store);
-									ps1.setDate(9, date);
-									ps1.executeUpdate();
-
-									// If update was successful
-									// Input data is stored in session for later
+								// If client account exists redirect
+								// employee to
+								// the next web page
+								if (rs1 != null && rs1.next()) {
+									// Input data is stored in session for
+									// later
 									// use
-									session.setAttribute("carName", carModel);
-									session.setAttribute("carPlate", carPlate);
-									session.setAttribute("carFuel", carFuel);
+									session.setAttribute("customerName", customerName);
+									session.setAttribute("customerSurname", customerSurname);
+									session.setAttribute("customerTRN", customerTRN);
 
-									// Inform user for successful update an
-									// redirect
-									// them to the next webpage
-									RequestDispatcher rd = getServletContext()
-											.getRequestDispatcher("/EmployeeLogout.html");
+									// Redirect user to the next web page
+									RequestDispatcher rd = getServletContext().getRequestDispatcher("/Carform.html");
 									PrintWriter out = response.getWriter();
 									out.println("<html><body>");
-									out.println("<h1>Car registered successfully!</h1>");
+									out.println("<h1>Customer : " + customerName + " " + customerSurname
+											+ " has already been registered!</h1>");
 									out.println("</body></html>");
 									rd.include(request, response);
 
-								} else {
-									// If there is a car registered with the
-									// same
-									// license plate in database inform user
-									RequestDispatcher rd = getServletContext().getRequestDispatcher("/Carform.html");
-									PrintWriter out = response.getWriter();
-									out.println("<font color=red>Car with license plate: " + carPlate
-											+ " already exists in database.</font>");
-									out.println("<font color=red>Please check again your license plate number.</font>");
-									rd.include(request, response);
-								}
+								} // Register new client, if their data can
+									// not
+									// be found in database
+								else {
 
-							}
-							// If updating database was unsuccessful inform user
+									// Get latest entry number
+									ps = con.prepareStatement(
+											" SELECT Entry FROM CUSTOMER ORDER BY Entry DESC LIMIT 1");
+									rs = ps.executeQuery();
+									rs.next();
+									entry = rs.getInt("Entry") + 1;
+
+									// Insert client information to database
+									ps2 = con.prepareStatement("INSERT INTO CUSTOMER  VALUES (?,?,?,?,?,?)");
+									ps2.setInt(1, entry);
+									ps2.setString(2, customerName);
+									ps2.setString(3, customerSurname);
+									ps2.setLong(4, ctrn);
+									ps2.setDate(5, java.sql.Date.valueOf(java.time.LocalDate.now()));
+									ps2.setInt(6, store);
+									int result = ps2.executeUpdate();
+
+									// If registration is successful inform
+									// user
+									if (result != 0) {
+
+										// Input data is stored in session
+										// for
+										// later
+										// use
+										session.setAttribute("customerName", customerName);
+										session.setAttribute("customerSurname", customerSurname);
+										session.setAttribute("customerTRN", customerTRN);
+
+										// Redirect user to the next web
+										// page
+										RequestDispatcher rd = getServletContext()
+												.getRequestDispatcher("/Carform.html");
+										PrintWriter out = response.getWriter();
+										out.println("<html><body>");
+										out.println("<h1>Customer registered successfully!</h1>");
+										out.println("</body></html>");
+										rd.include(request, response);
+									}
+								}
+							} // If updating database fails inform user
 							catch (SQLException e) {
+
 								e.printStackTrace();
-								RequestDispatcher rd = getServletContext().getRequestDispatcher("/Carform.html");
+								RequestDispatcher rd = getServletContext()
+										.getRequestDispatcher("/CustomerRegistration.html");
 								PrintWriter out = response.getWriter();
 								out.println(
-										"<font color=red> Can not update database.Please check your connection.</font>");
+										"<font color=red>Failed to register new client. Please check your connection and try again.</font>");
 								rd.include(request, response);
+
 							}
-						}
-						// If inserted license plate was incorrect inform user
-						else {
-							RequestDispatcher rd = getServletContext().getRequestDispatcher("/Carform.html");
+						} // If inserted TRN number contains characters
+							// inform
+							// user.
+						catch (NumberFormatException e) {
+							RequestDispatcher rd = getServletContext()
+									.getRequestDispatcher("/CustomerRegistration.html");
 							PrintWriter out = response.getWriter();
-							out.println(
-									"<font color=red>License plate contains three capital letters and four numbers.</font>");
-							out.println("<br>");
-							out.println("<font color=red>Example : ABC-1234 </font>");
+							out.println("<font color=red>TRN number you inserted contains characters.</font>");
+							out.println("<font color=red>TRN number must contain only 9 digits.</font>");
 							rd.include(request, response);
 						}
-
-					}
-					// If inserted release year was wrong inform user
+					} // If TRN number is longer than expected inform user
 					else {
-						RequestDispatcher rd = getServletContext().getRequestDispatcher("/Carform.html");
+						RequestDispatcher rd = getServletContext().getRequestDispatcher("/CustomerRegistration.html");
 						PrintWriter out = response.getWriter();
-						out.println("<font color=red>Car release year should be greater than 1900 and less than "
-								+ currentyear + ".</font>");
+						out.println(
+								"<font color=red>TRN must be 9 digit long, not " + customerTRN.length() + ".</font>");
 						rd.include(request, response);
 					}
-
-				} else {
-					RequestDispatcher rd = getServletContext().getRequestDispatcher("/Carform.html");
+				} // If user information is empty
+				else {
+					RequestDispatcher rd = getServletContext().getRequestDispatcher("/CustomerRegistration.html");
 					PrintWriter out = response.getWriter();
-					out.println("<font color=red>You are not allowed to register a new vehicle.</font>");
+					out.println("<font color=red> All fields are obligatory,please provide all information.</font>");
 					rd.include(request, response);
 				}
-				// If input data were empty inform user that are fields are
-				// obligatory
-			} else {
-				RequestDispatcher rd = getServletContext().getRequestDispatcher("/Carform.html");
-				PrintWriter out = response.getWriter();
-				out.println("<font color=red>All fields are obligatory.</font>");
-				rd.include(request, response);
+
 			}
+
 		}
 	}
 }
