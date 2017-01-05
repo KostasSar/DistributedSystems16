@@ -33,13 +33,11 @@ public class Menu extends HttpServlet {
 		Cookie[] cookies = request.getCookies();
 		String userName = null;
 		String userActivities = null;
-		String rc = null;
 		String rv = null;
 		String wc = null;
 		String wv = null;
 		String cv = null;
 		String dp = null;
-	
 
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
@@ -49,13 +47,11 @@ public class Menu extends HttpServlet {
 				if (cookie.getName().equals("userRights")) {
 					userActivities = cookie.getValue();
 					String[] parts = userActivities.split("-");
-					rc = parts[0];
 					rv = parts[1];
 					wc = parts[2];
 					wv = parts[3];
 					cv = parts[4];
 					dp = parts[5];
-					
 
 				}
 
@@ -65,8 +61,9 @@ public class Menu extends HttpServlet {
 		if (userName == null) {
 			response.sendRedirect("Menu.html");
 		} else {
+			// Register new customer button
 			if (request.getParameter("button1") != null) {
-				if (wc.equals("wc") && wv.equals("wv") && rc.equals("rc")) {
+				if (wc.equals("wc") && wv.equals("wv")) {
 					RequestDispatcher rd = getServletContext().getRequestDispatcher("/CustomerRegistration.html");
 					PrintWriter out = response.getWriter();
 					out.println("<html><body>");
@@ -80,8 +77,9 @@ public class Menu extends HttpServlet {
 					rd.include(request, response);
 				}
 			}
+			// Confirm vehicle condition button
 			if (request.getParameter("button2") != null) {
-				if (rv.equals("rv") && wv.equals("wv") && cv.equals("cv")) {
+				if (rv.equals("rv") && cv.equals("cv")) {
 					RequestDispatcher rd = getServletContext().getRequestDispatcher("/MechanicActions.html");
 					PrintWriter out = response.getWriter();
 					out.println("<html><body>");
@@ -95,6 +93,7 @@ public class Menu extends HttpServlet {
 					rd.include(request, response);
 				}
 			}
+			// Check customer cash prize button
 			if (request.getParameter("button3") != null) {
 				if (dp.equals("dp")) {
 					RequestDispatcher rd = getServletContext().getRequestDispatcher("/Cash.html");
@@ -109,7 +108,16 @@ public class Menu extends HttpServlet {
 					out.println("<font color=red>You are not allowed to deliver customer's prize.</font>");
 					rd.include(request, response);
 				}
+
+				// Logout button
 				if (request.getParameter("button4") != null) {
+
+					// If user logs out all cookies are deleted.
+					if (cookies != null) {
+						for (Cookie cookie : cookies) {
+							cookie.setMaxAge(0);
+						}
+					}
 
 					RequestDispatcher rd = getServletContext().getRequestDispatcher("/Login.html");
 					PrintWriter out = response.getWriter();
