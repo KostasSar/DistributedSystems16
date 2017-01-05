@@ -1,7 +1,9 @@
 
+
 package servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -46,9 +48,25 @@ public class EmployeeLogout extends HttpServlet {
 				RequestDispatcher rd = getServletContext().getRequestDispatcher("/Menu.html");
 				rd.include(request, response);
 			} else if (request.getParameter("button2") != null) {
+				// If user logs out all cookies are deleted.
+				if (cookies != null) {
+					for (Cookie cookie : cookies) {
+						cookie.setMaxAge(0);
+					}
+				}
+
 				// Redirect user to the logout page
 				RequestDispatcher rd = getServletContext().getRequestDispatcher("/Login.html");
+				PrintWriter out = response.getWriter();
+				out.println("<html><body>");
+				out.println("<h1>Logout was successful.</h1>");
+				out.println("</body></html>");
+				rd.include(request, response);
+			} else if (request.getParameter("button3") != null) {
+				// Redirect user to vehicle registration page
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/Carform.html");
 				rd.include(request, response);
 			}
 		}
 	}
+}
