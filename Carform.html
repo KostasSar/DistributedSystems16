@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="mystyle.css">
+	</head>
+
+	<body style="background-color:Gainsboro;">
+		<h1>Car Form</h1>
+		
+		<form action="CarRegisterServlet" method="post">
+			Insert model:<br>
+			<input type="text" placeholder="model" name="carmodel" required><br>
+
+			Insert license plate:<br>
+
+			<input type="text" placeholder="plate" name="carplate" required><br>
+			Insert fuel type:<br>
+			<input type="radio" name="fuel" value="Oil" checked>Oil
+  			<input type="radio" name="fuel" value="Gas">Gas
+  			<input type="radio" name="fuel" value="Petrol"> Petrol<br>
+			Insert release year:<br>
+			<input type="text" placeholder="year" name="caryear" required><br>
+
+			
+			
+			<input type="submit" value="Submit"> 
+			<button type="reset"  class="Cbutton" >Clear</button>
+		</form>
+	</body>
+</html>
