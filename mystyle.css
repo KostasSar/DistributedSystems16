@@ -1,43 +1,59 @@
 .button{
-    background-color: blue;
-    width: 40%;
-    color: white;
-    padding: 12px 20px;
-    margin: 8px 0;
-    border: none;
+	background-color: #6699ff;
+	width: 40%;
+	color: white;
+	padding: 12px 20px;
+	margin: 8px 0;
+	border: none;
 }
-     
+	
 .Lbutton{
-    background-color: red;
-    color: white;
-    padding: 12px 20px;
-    margin: 8px 0;
-    border: none;
+	background-color: #6699ff;
+	color: white;
+	padding: 12px 20px;
+	margin: 8px 0;
+	border: none;
 }
- 
+
 .Bbutton {
-    background-color: yellow;
-    color: white;
-    padding: 12px 20px;
-    margin: 8px 0;
-    border: none;
-}   
-     
+	background-color: #6699ff;
+	color: white;
+	padding: 12px 20px;
+	margin: 8px 0;
+	border: none;
+}	
+	
 .Cbutton {
-    background-color: red;
-    color: white;
-    padding: 12px 20px;
-    margin: 8px 0;
-    border: none;
-}   
- 
+	background-color: #6699ff;
+	color: white;
+	padding: 12px 20px;
+	margin: 8px 0;
+	border: none;
+}	
+
 input[type=text], input[type=password] {
-    width: 30%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    border-radius: 12px;
+	width: 30%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	border-radius: 12px;
 }
-     
+	
+input[type=submit] {
+	background-color: #6699ff;
+	color: white;
+	padding: 12px 20px;
+	margin: 8px 0;
+	border: none;
+}			
+
+input[type=radio]{
+	margin: 14px 0;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
 input[type=submit] {
     background-color: green;
     color: white;
