@@ -1,52 +1,63 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<link rel="stylesheet" type="text/css" href="./mystyle.css">
-		<script type="text/javascript">
-			function HideFunction(){
-				document.getElementById("ModifyCustomerDataButton").style.display="none";
-				document.getElementById("ModifyCustomerDataForm").style.display="block";
-				document.getElementById("SubmitCustomerDataDiv").style.display="none";
-			}
-		
-			function ShowFunction(){
-				document.getElementById("ModifyCustomerDataButton").style.display="block";
-				document.getElementById("ModifyCustomerDataForm").style.display="none";
-				document.getElementById("SubmitCustomerDataDiv").style.display="block";
-			}
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="./mystyle.css">
+<script type="text/javascript">
+	function HideFunction() {
+		document.getElementById("ModifyCustomerDataButton").style.display = "none";
+		document.getElementById("ModifyCustomerDataForm").style.display = "block";
+		document.getElementById("SubmitCustomerDataDiv").style.display = "none";
+	}
 
-		</script>
-	</head>
-	<body style="background-color:Gainsboro;">
-		<div id="ModifyCustomerListDiv"> 
-			<input type="button" class="button" id="ModifyCustomerDataButton" onclick="HideFunction()" value="Update Customer Data"><br>
-			<form id="ModifyCustomerDataForm" style="display:none" action="MechanicServlet" method="post">
-				Insert the license plate:<br>
-				<input type="text" placeholder="plate" name="carplate" required><br>
-				Insert owner's TRN : <br>
-				<input type="text" placeholder="TRN" name="ctrn" required><br>
-				Insert vehicle condition: <br>
-				<input type="radio" name="carcondition" value="Good" checked>Good
-  				<input type="radio" name="carcondition" value="Moderate">Moderate
-  				<input type="radio" name="carcondition" value="Bad">Bad<br>
-				Insert release year : <br>
-				<input type="text" placeholder="year" name="year" required><br>
-				<input type="submit" value="Submit" name="button1"> 
-				<button type="reset"  class="Cbutton" >Clear</button>
-				<input type="button" class="Bbutton" value="Back" onclick="ShowFunction()" > 
-			</form>
-		</div>
-		
-		<div id="SubmitCustomerDataDiv"> 
-			<form action="MechanicServlet" method="post">
-				<input type="submit" class="button" id="SubmitCustomerListButton" name="button2" value="View Vehicle"><br>
-			</form>
-		</div>
-		<div id="Logout"> 
-			<form action="MechanicServlet" method="post">
-				<input type="submit" class="button" id="Logout" name="button3" value="Logout"><br>
-			</form>
-			</div>
-	</body>
+	function ShowFunction() {
+		document.getElementById("ModifyCustomerDataButton").style.display = "block";
+		document.getElementById("ModifyCustomerDataForm").style.display = "none";
+		document.getElementById("SubmitCustomerDataDiv").style.display = "block";
+	}
+</script>
+</head>
+<body style="background-color: Gainsboro;">
+	<div id="ModifyCustomerListDiv">
+		<br> <input type="button" class="button"
+			id="ModifyCustomerDataButton" onclick="HideFunction()"
+			value="Update Vehicle Condition"><br>
+		<form id="ModifyCustomerDataForm" style="display: none"
+			action="MechanicServlet" method="post">
+			Insert license plate:<br> <input type="text" placeholder="plate"
+				name="carplate" required><br> 
+			Insert vehicle condition: <br> <input type="radio"
+				name="carcondition" value="Good" checked>Good<input
+				type="radio" name="carcondition" value="Moderate">Moderate<input
+				type="radio" name="carcondition" value="Bad">Bad<br> <input
+				type="submit" value="Submit" name="button1">
+			<button type="reset" class="Cbutton">Clear</button>
+			<input type="button" class="Bbutton" value="Back"
+				onclick="ShowFunction()">
+		</form>
+	</div>
+	<br>
+
+	<div id="SubmitCustomerDataDiv">
+		<form action="MechanicServlet" method="post">
+			<input type="submit" class="button" id="SubmitCustomerListButton"
+				name="button2" value="View next vehicle for examination"><br>
+		</form>
+	</div>
+	<br>
+	<div id="Return">
+		<form action="MechanicServlet" method="post">
+			<input type="submit" class="button" id="Return" name="button4"
+				value="Return to menu"><br>
+		</form>
+	</div>
+	<br>
+	<div id="Logout">
+		<form action="MechanicServlet" method="post">
+			<input type="submit" class="button" id="Logout" name="button3"
+				value="Logout"><br>
+		</form>
+	</div>
+</body>
+
 </html>
