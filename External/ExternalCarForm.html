@@ -9,18 +9,17 @@
 
 <body>
     <center><img src="http://i.imgur.com/OHwYqb6.png" alt="Carecycle's logo icon">
-        <!-- INSERT SERVLET --->
-        <form action="insert servlet" method="get">
+        <form action="ExternalCarServlet" method="post">
             <h5>Model:</h5>
-            <input class="inp1" placeholder="Opel Astra" type="text">
+            <input class="inp1" name="model" placeholder="Opel Astra" type="text">
             <h5>License plate:</h5>
-            <input class="inp1" placeholder="AAA1234" type="text">
+            <input class="inp1" name="licensePlate" placeholder="AAA1234" type="text">
             <h5>Fuel Type:</h5>
             <input type="radio" name="fuel" value="Oil" checked> Oil
             <input type="radio" name="fuel" value="Gas"> Gas
             <input type="radio" name="fuel" value="Petrol"> Petrol
             <h5>Release year:</h5>
-            <input class="inp1" placeholder="1920" type="text">
+            <input class="inp1" name="releaseYear" placeholder="1920" type="text">
             <h5>Vehicle condition:</h5>
             <input type="radio" name="condition" value="Good" checked> Good
             <input type="radio" name="condition" value="Mediocre"> Mediocre

@@ -14,32 +14,32 @@
                 <td valign="top">
                     <h3><b>Got an account?</b></h3>
 
-                    <!-- INSERT SERVLET --->
-                    <form action="insert servlet" method="post">
+                    <form action="ExternalLoginServlet" method="post">
                         <h5>E-mail:</h5>
-                        <input class="inp1" placeholder="example@mail.com" type="text">
+                        <input class="inp1" name="email" placeholder="example@mail.com" type="text">
                         <h5>Password:</h5>
                         <input class="inp1" type="password" name="password" placeholder="*********">
-                        <br><button type="Submit">Submit</button>
+                        <br><button type="Submit" name="button1">Submit</button>
 
                 </td>
                 <td valign="top">
 
-                    <!-- INSERT SERVLET --->
-                    <form action="insert servlet" method="post">
+                    <form action="ExternalLoginServlet" method="post">
                         <h3><b>New to Carecycle?</b></h3>
 
                         <h5>First Name:</h5>
-                        <input class="inp1" placeholder="John" type="text">
+                        <input class="inp1" name="firstName" placeholder="John" type="text">
                         <h5>Last Name:</h5>
-                        <input class="inp1" placeholder="Doe" type="text">
+                        <input class="inp1" name="lastName" placeholder="Doe" type="text">
                         <h5>E-mail:</h5>
-                        <input class="inp1" placeholder="example@mail.com" type="text">
+                        <input class="inp1" name="email" placeholder="example@mail.com" type="text">
                         <h5>Password:</h5>
-                        <input class="inp1" placeholder="********" type="password">
+                        <input class="inp1" name="password" placeholder="********" type="password">
                         <h5>Phone Number:</h5>
-                        <input class="inp1" placeholder="6912345678" type="text">
-                        <br><button type="Submit">Submit</button>
+                        <input class="inp1" name="phoneNumber" placeholder="6912345678" type="text">
+                        <h5>TRN:</h5>
+                        <input class="inp1" name="TRN" placeholder="1234567890" type="text">
+                        <br><button type="Submit" name="button2">Submit</button>
 
                 </td>
             </tr>
