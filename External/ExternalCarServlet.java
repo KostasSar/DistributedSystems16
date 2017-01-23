@@ -94,7 +94,7 @@ public class ExternalCarServlet extends HttpServlet {
 				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ExternalCarForm.html");
 				PrintWriter out = response.getWriter();
 				out.println(
-						"<html><font color=red> We were unable to save your appointment.Please try again.</font></html>");
+						"<font color=red> We were unable to save your appointment.Please try again.</font>");
 				rd.include(request, response);
 			}
 		}
