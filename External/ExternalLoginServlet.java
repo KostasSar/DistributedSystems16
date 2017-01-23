@@ -2,6 +2,10 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -26,71 +30,132 @@ public class ExternalLoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		// Create connection
+		Connection con = (Connection) getServletContext().getAttribute("DBConnection");
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
 		// user logged in
 		if (request.getParameter("button1") != null) {
 
 			// Get information user has provided
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
+			System.out.println(" a "+email+" pas "+password);
 			
-			//DB INPUT
-			String login = "valid";
+			// Check if user account exists
+			try {
+				ps = con.prepareStatement("Select * from WebUsers WHERE Email=? AND Password=?");
+				ps.setString(1, email);
+				ps.setString(2, password);
+				rs = ps.executeQuery();
 
-			if (login.equals("valid")) {
-				//In case of a valid login the user input is processed and he is redirected to the next page.
-				
-				// DB INPUT
-				String exCustomerTRN = "";
+				// If user information is incorrect
+				if (!rs.isBeforeFirst()) {
+					// In case the email-password combo is invalid user is
+					// redirected to the login page with the according message.
+					RequestDispatcher rd = getServletContext().getRequestDispatcher("/ExternalLogin.html");
+					PrintWriter out = response.getWriter();
+					out.println("<font color=red>Either user name or password is wrong. Please try again.</font>");
+					rd.include(request, response);
+				}
+				// In case of valid login, store user's information from
+				// database
+				//else {
 
-				// Create new session
-				HttpSession session = request.getSession();
-				// Input data is stored in session for later use
-				session.setAttribute("exCustomerTRN", exCustomerTRN);
+					rs.next();
+					Long exCustomerTRN = rs.getLong("TRN");
+					String firstName = rs.getString("Name");
+					// The user input is processed and he is redirected to the
+					// next page.
 
-				// DB INPUT
-				String firstName = "";
-				// A cookie is created containing the user's name.
-				Cookie userName = new Cookie("userName", firstName);
-				response.addCookie(userName);
-				userName.setMaxAge(60 * 60 * 24);
+					// Create new session
+					HttpSession session = request.getSession();
+					// Input data is stored in session for later use
+					session.setAttribute("exCustomerTRN", exCustomerTRN);
 
-				// DB OUTPUT
+					// A cookie is created containing the user's name.
+					Cookie userName = new Cookie("userName", firstName);
+					response.addCookie(userName);
+					userName.setMaxAge(60 * 60 * 24);
 
-				response.sendRedirect("/ExternalCarForm.html");
+					response.sendRedirect("/ExternalCarForm.html");
+				//}
 
-			}else {
-				//In case the email-password combo is invalid user is redirected to the login page with the according message.
+			} // In case connection with database fails inform users
+			catch (SQLException e) {
+				e.printStackTrace();
 				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ExternalLogin.html");
 				PrintWriter out = response.getWriter();
-				out.println("<font color=red>Either user name or password is wrong. Please try again.</font>");
+				out.println("<font color=red>Connection with database failed.Please try again.</font>");
 				rd.include(request, response);
 			}
-			// user signed up
+
+			// User signed up
 		} else if (request.getParameter("button2") != null) {
-			
-			//User input is processed and he is redirected to the next page.
-			
+
+			// User input is processed and he is redirected to the next page.
+
 			String firstName = request.getParameter("firstName");
 			String lastName = request.getParameter("lastName");
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
-			String phoneNumber = request.getParameter("phoneNumber");
+			String pnumber = request.getParameter("phoneNumber");
 			String TRN = request.getParameter("TRN");
 
-			// Create new session
-			HttpSession session = request.getSession();
-			// Input data is stored in session for later use
-			session.setAttribute("customerTRN", TRN);
+			// Check if TRN length is correct so it can be stored
+			// successfully in database
+			if (TRN.length() == 9) {
 
-			// A cookie is created containing the user's name.
-			Cookie userName = new Cookie("userName", firstName);
-			response.addCookie(userName);
-			userName.setMaxAge(60 * 60 * 24);
+				// Convert variables to long so they can be stored in database
+				try {
 
-			// DB OUTPUT
+					Long ctrn = Long.parseLong(TRN);
+					Long phonenumber = Long.parseLong(pnumber);
 
-			response.sendRedirect("/ExternalCarForm.html");
+					try {
 
+						ps = con.prepareStatement("INSERT INTO WebUsers VALUES (?,?,?,?,?,?)");
+						ps.setString(1, firstName);
+						ps.setString(2, lastName);
+						ps.setLong(3, ctrn);
+						ps.setLong(4, phonenumber);
+						ps.setString(5, email);
+						ps.setString(6, password);
+						ps.executeUpdate();
+
+						// Create new session
+						HttpSession session = request.getSession();
+						// Input data is stored in session for later use
+						session.setAttribute("customerTRN", TRN);
+
+						// A cookie is created containing the user's name.
+						Cookie userName = new Cookie("userName", firstName);
+						response.addCookie(userName);
+						userName.setMaxAge(60 * 60 * 24);
+						response.sendRedirect("/ExternalCarForm.html");
+
+					} catch (SQLException e) {
+
+						e.printStackTrace();
+						RequestDispatcher rd = getServletContext().getRequestDispatcher("/ExternalLogin.html");
+						PrintWriter out = response.getWriter();
+						out.println("<font color=red>Connection with database failed.Please try again.</font>");
+						rd.include(request, response);
+					}
+				} catch (NumberFormatException e) {
+					RequestDispatcher rd = getServletContext().getRequestDispatcher("/ExternalLogin.html");
+					PrintWriter out = response.getWriter();
+					out.println("<font color=red>Tax Registration Number or Phone number contains letters.</font>");
+					rd.include(request, response);
+				}
+			} else {
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ExternalLogin.html");
+				PrintWriter out = response.getWriter();
+				out.println("<font color=red>Tax Registration Number should be 9 digits long, not " + TRN.length()
+						+ " .</font>");
+				rd.include(request, response);
+			}
 		}
 
 	}
