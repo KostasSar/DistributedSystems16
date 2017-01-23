@@ -1,23 +1,24 @@
 <html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Carecycle</title>
+		<link rel="stylesheet" type="text/css" href="mystyle.css">
+	</head>
 
-<head>
-    <title>Carecycle</title>
-</head>
 <style>
-
 </style>
 
-<body>
+	<body>
     <table width="80%">
         <tr>
             <td align="center" width="20%">
-                <img src="http://i.imgur.com/OHwYqb6.png" alt="Carecycle's logo icon"></td>
+                <a href="http://www.google.com"><img src="http://i.imgur.com/OHwYqb6.png" alt="Carecdycle's logo icon"></a></td>
             <td align="center" width="70%">
                 <h1><b>Welcome to Carecycle!</b></h1>
             </td>
         </tr>
     </table>
-    <table width="80%">
+    <table width="80%" >
         <tr>
             <td align="center" width="40%">
                 <h3>Was your vehicle delivered and checked?</h3>
@@ -25,41 +26,96 @@
             <td align="center" width="40%">
                 <!-- INSERT SERVLET -->
                 <form method="post" action="insert servlet" class="form-group">
-                    <input class="inp1" type="text" placeholder="Insert TRN here..." size="40" />
+                    <input class="inp1" type="text" placeholder="Insert TRN here..."  />
                 </form>
             </td>
         </tr>
     </table>
-    <table width="80%">
+    <table width="80%" border="1px">
         <tr>
             <td align="center" width="40%">
                 <h3>Find us here!</h3>
-            </td>
-            <td>
-                <h2>*INSERT MAP HERE!*</h2>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <form action="ExternalLoginServlet" method="get">
-                    <button type="Submit" name="button3">Contact us now!</button>
+				<form action="ExternalLoginServlet" method="get">
+                    <button type="Submit" name="button3" class="Contactbutton">Contact us now!</button>
                 </form>
+			</td>
+            <td>
+			<!--The map needs an HTML element to hold the map-->
+			<div id="map" style="width:100%;height:300px"></div>
+			<script>
+function myMap() {
+	<!--declare locations-->
+	var stores = [
+		['Βρυαντος 17', 38.0059826, 23.7418422],
+		['Βασιλέως Γεωργίου Α 8', 37.9428881, 23.6464552], 
+		['Ναρκίσου 20', 37.993481, 23.849403],
+		['Όθωνος Παπαδημητρίου 15', 37.9011442, 23.8726503], 
+		['Μητροπόλεως 9', 38.0549562, 23.8076550]
+	];
+	
+	<!--create map-->
+	var mapCanvas = document.getElementById("map");
+	var center = new google.maps.LatLng(38 , 23.7);
+	var mapOptions = {center,zoom: 12};
+	var map = new google.maps.Map(mapCanvas, mapOptions);
+	
+	var i;
+	var infoWindow = new google.maps.InfoWindow();
+	var marker, latLngStore;
+	var pos, lat, lon;
+	
+	for(i=0;i<stores.length;i++){
+		pos = stores[i][0];
+		lat = stores[i][1];
+		lon = stores[i][2];
+			
+		latLngStore = new google.maps.LatLng(lat, lon);
+		
+		marker= new google.maps.Marker({
+			position:latLngStore,
+			map:map,
+			title:pos
+		});
+		
+		// Allow each marker to have an info window    
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                infoWindow.setContent(stores[i][0]);
+                infoWindow.open(map, marker);
+            }
+        })(marker, i));		
+		
+	}
+}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>
             </td>
-        </tr>
     </table>
+	
     <h3>Why should I recycle my car?</h3>
-    <p>1. Cash Money <br> The first benefit of auto recycling is exactly what you’re hoping it is—an opportunity to earn some money.<br> By recycling your car with Carecycle you can get rid of your aged, non-functional or retiring car,<br> while putting
-        extra cash in your pocket. </p>
-    <p>2. It’s Easy <br> When you’re dealing with Carecycle, it’s very easy to get your automobile recycled. You simply log in, <br> and then we arrange a mutually-convenient time to bring it in. Many people are becoming familiar with <br> auto recycling,
-        and the added convenience certainly makes it an easy decision for them. </p>
-    <p>3. People Are Becoming More Aware of Auto Recycling<br> By recycling your vehicle, you get the opportunity to participate in a valuable global recycling program<br> - in fact; over 12 million vehicles are recycled across North America annually! This
-        prevents a significant <br> amount of oil from being processed in the production of new metal. And while those numbers are pretty <br> good—we can always use one more.
-    </p>
-    <p>4. A Positive Impact On The Environment<br> The fourth and final benefit is the fact that auto recycling has a positive impact on the environment. <br> The auto recycling business prevents a mass abundance of toxic car fluids from seeping into soil
-        and groundwater.<br> Instead of auto wrecking yards that crush cars with no regard for the hazardous fluids that spill out from each car,<br> reputable auto recycling yards like Carcone’s ensure that components like gasoline, batteries, and mercury
-        are <br> removed from each vehicle.
-    </p>
-
-</body>
-
+    <h4>1. Cash Money </h4>
+		<p> The first benefit of auto recycling is exactly what you’re hoping it is—an opportunity to earn some money.
+			<br> By recycling your car with Carecycle you can get rid of your aged, non-functional or retiring car,
+			<br> while puttingextra cash in your pocket. 
+		</p>
+    <h4>2. It’s Easy </h4>
+		<p> When you’re dealing with Carecycle, it’s very easy to get your automobile recycled. You simply log in, 
+			<br> and then we arrange a mutually-convenient time to bring it in. Many people are becoming familiar with 
+			<br> auto recycling,and the added convenience certainly makes it an easy decision for them. 
+		</p>
+    <h4>3. People Are Becoming More Aware of Auto Recycling</h4>
+		<p> By recycling your vehicle, you get the opportunity to participate in a valuable global recycling program
+			<br> - in fact; over 12 million vehicles are recycled across North America annually! Thisprevents a significant 
+			<br> amount of oil from being processed in the production of new metal. And while those numbers are pretty 
+			<br> good—we can always use one more.
+		</p>
+    <h4>4. A Positive Impact On The Environment</h4>
+		<p> The fourth and final benefit is the fact that auto recycling has a positive impact on the environment. 
+			<br> The auto recycling business prevents a mass abundance of toxic car fluids from seeping into soil and groundwater.
+			<br> Instead of auto wrecking yards that crush cars with no regard for the hazardous fluids that spill out from each car,
+			<br> reputable auto recycling yards like Carcone’s ensure that components like gasoline, batteries, and mercury are 
+			<br> removed from each vehicle.
+		</p>
+	</body>
 </html>

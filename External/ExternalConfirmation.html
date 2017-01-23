@@ -2,20 +2,37 @@
 
 <head>
     <title>Carecycle</title>
-</head>
-<style>
 
+	<style>
+		.center {
+		margin: auto;
+		text-align: center;
+		width: 60%;
+		background-color: lightgray;
+		padding: 10px;
+	}
+	
+	.submit{
+	color: black;
+	background-color:green;
+	
+	border-radius: 25px;
+	border: none;
+	}
 </style>
+</head>
+
 
 <body>
-    <center><img src="http://i.imgur.com/OHwYqb6.png" alt="Carecycle's logo icon">
-        <h2>*DATABASE INFO TO BE APPENDED HERE THROUGH SERVLET*</h2>
+    <center><a href="./welcome.html"><img src="http://i.imgur.com/OHwYqb6.png" alt="Carecycle's logo icon"></a>
+        <div class="center">
+		<h2>*DATABASE INFO TO BE APPENDED HERE THROUGH SERVLET*</h2>
         <h2><b><u>Thank you for choosing Carecycle!</u></b></h2>
         <!-- INSERT SERVLET --->
         <form action="insert servlet" method="get">
-            <button type="Submit">Back to home page</button>
+            <button type="Submit" class="submit">Back to home page</button>
         </form>
+		</div>
     </center>
 </body>
-
 </html>
