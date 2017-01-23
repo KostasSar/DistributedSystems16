@@ -1,6 +1,12 @@
 package servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -41,26 +47,56 @@ public class ExternalCarServlet extends HttpServlet {
 			response.sendRedirect("Login.html");
 		} else {
 
-			String model = request.getParameter("model");
-			String licensePlate = request.getParameter("licensePlate");
-			String fuel = request.getParameter("fuel");
-			String releaseYear = request.getParameter("releaseYear");
-			String condition = request.getParameter("condition");
-			String pickup = request.getParameter("pickup");
+			Connection con = (Connection) getServletContext().getAttribute("DBConnection");
+			PreparedStatement ps = null;
+			ResultSet rs = null;
 
+			String condition = request.getParameter("condition");
+			String hour = request.getParameter("hour");
+			int status = 0;
+
+			// ΟΙ ΜΕΤΑΒΛΗΤΕΣ ΠΟΥ ΜΑΣ ΛΕΙΠΟΥΝ
+			int store; // Κωδικος μαγαζιου
+			float distance; // Αποσταση
+			Date appointment_date; // Ημερομηνια και ωρα
+			Float cost; // Κοστος μεταφορας
+			String pickuplocation; // Σημειο παραλαβης
 			String userTRN = null;
 			HttpSession session = request.getSession(true);
 			userTRN = (String) session.getAttribute(userTRN);
-			
-			if (pickup.equals("yes")) {
-				// CALCULATE DISTANCE FROM MAP INPUT.
+			Long ctrn = Long.parseLong(userTRN);
+
+			try {
+				// Store appointment details in database
+				ps = con.prepareStatement("INSERT INTO WebAppointments VALUES (?");
+				ps.setLong(1, ctrn);
+				ps.setDate(2, appointment_date);
+				ps.setInt(3, store);
+				ps.setFloat(4, distance);
+				ps.setFloat(5, cost);
+				ps.setInt(6, status);
+				ps.setString(7, pickuplocation);
+
+				// If update is successful redirect user to the appropriate page
+
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ExternalConfirmation.html");
+				PrintWriter out = response.getWriter();
+				out.println("<html><body>");
+				out.println("<h1>Your appointment has been succesfully booked!</h1>");
+				out.println("</body></html>");
+				rd.include(request, response);
 
 			}
+			// If updating database fails inform user
+			catch (SQLException e) {
+				e.printStackTrace();
 
-			// DB OUTPUT
-
-			RequestDispatcher rd = getServletContext().getRequestDispatcher("/ExternalConfirmation.html");
-			rd.include(request, response);
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ExternalCarForm.html");
+				PrintWriter out = response.getWriter();
+				out.println(
+						"<html><font color=red> We were unable to save your appointment.Please try again.</font></html>");
+				rd.include(request, response);
+			}
 		}
 	}
 
