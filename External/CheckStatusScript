@@ -1,0 +1,64 @@
+	
+  
+  // Create new connection
+
+		Connection con = (Connection) getServletContext().getAttribute("DBConnection");
+		java.sql.PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		int status;
+		float cash;
+    
+    //O χρήστης δίνει αριθμο αφμ και καταστημα 
+    //Τα πεντε τυχαια καταστηματα στον χαρτη να εχουν εναν κωδικο απο 1 εως 5
+		Long customerTRN ;
+		int store ;
+    
+
+			try {
+				ps = con.prepareStatement(
+						"SELECT * FROM WebAppointments WHERE Owner_TRN=? AND Store=? AND Status NOT IN ('3')");
+				ps.setLong(1, customerTRN);
+				ps.setInt(2, store);
+				rs = ps.executeQuery();
+				rs.next();
+				status = rs.getInt("Status");
+				pickupcost = rs.getFloat("Cost");
+
+				if (status == 0) {
+					RequestDispatcher rd = getServletContext().getRequestDispatcher("/ExternalConfirmation.html");
+					PrintWriter out = response.getWriter();
+					out.println("Your car hasn't been delivered in store yet.");
+					rd.include(request, response);
+				} else if (status == 1) {
+					RequestDispatcher rd = getServletContext().getRequestDispatcher("/ExternalConfirmation.html");
+					PrintWriter out = response.getWriter();
+					out.println("Your car has been delivered in store,but not checked.");
+					rd.include(request, response);
+				} else if (status == 2) {
+
+					ps = con.prepareStatement("Select * from Customers WHERE TRN=? and Store=?");
+					ps.setLong(1, customerTRN);
+					ps.setInt(2, store);
+					rs = ps.executeQuery();
+					rs.next();
+					cash = rs.getFloat("Total_Cash_Prize");
+					RequestDispatcher rd = getServletContext().getRequestDispatcher("/ExternalConfirmation.html");
+					PrintWriter out = response.getWriter();
+					out.println("Evaluation of your car has been completed.");
+					out.println("Your cash reward is " + cash + " Euro");
+					out.println("Visit our store to collect your reward.");
+					rd.include(request, response);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				e.printStackTrace();
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ExternalConfirmation.html");
+				PrintWriter out = response.getWriter();
+				out.println("<font color=red>Connection with database failed.Please try again.</font>");
+				rd.include(request, response);
+
+			}
+
+		}
+	}
